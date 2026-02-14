@@ -1,36 +1,37 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+Facial Recognition Attendance System
 
-## Getting Started
+A facial recognition-based employee registration and attendance system built using Next.js, MongoDB, and face-api.js.
 
-First, run the development server:
+This application allows employee registration with face descriptor capture and stores biometric data securely for future face matching.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+🚀 Features
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+👤 Employee Registration
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+📷 Face Capture using webcam
 
-## Learn More
+🧠 Face Descriptor Extraction (face-api.js)
 
-To learn more about Next.js, take a look at the following resources:
+🗄 MongoDB Database Integration
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+⚡ Next.js App Router
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+🎨 Modern UI with Tailwind CSS
 
-## Deploy on Vercel
+🔐 Duplicate Employee Prevention
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+🛠 Tech Stack
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Frontend: Next.js (App Router)
+
+Backend: Next.js API Routes
+
+Database: MongoDB
+
+Face Recognition: face-api.js
+
+Styling: Tailwind CSS
+
+HTTP Client: Axios
+
