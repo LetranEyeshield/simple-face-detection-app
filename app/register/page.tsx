@@ -1,39 +1,69 @@
 "use client";
 
 import { useState } from "react";
-
 import FaceScanner from "@/app/components/FaceScanner";
-import { api } from "@/app//lib/axios";
+import { api } from "@/app/lib/axios";
+
+type Employee = {
+  fullName: string;
+  department: string;
+  role: string;
+  faceDesc: number[] | null;
+};
+
+const roleArr: string[] = [
+  "Doctor",
+  "Nurse",
+  "Midwife",
+  "Pharmacist",
+  "Dentist",
+  "Medical Technologist",
+  "Information Technology",
+  "Programmer/Web Developer",
+  "Administrative Aide",
+];
+
+const deptArr: string[] = [
+  "Doctor's Office",
+  "Pharmacy",
+  "Midwives",
+  "Laboratory",
+  "TB Dots",
+  "Dental",
+  "IT Department",
+  "Sanitary",
+];
 
 export default function RegisterPage() {
-  const [fullname, setFullname] = useState("");
-  const [department, setDepartment] = useState("");
-  const [role, setRole] = useState("");
-  const [faceDescriptor, setFaceDescriptor] = useState<number[] | null>(null);
   const [loading, setLoading] = useState(false);
 
+  const [form, setForm] = useState<Employee>({
+    fullName: "",
+    department: "",
+    role: "",
+    faceDesc: null,
+  });
+
   const handleSubmit = async () => {
-    if (!faceDescriptor) {
+    if (!form.faceDesc) {
       alert("Please capture your face first.");
       return;
     }
 
     try {
-      setLoading(true)
+      setLoading(true);
 
-      const res = await api.post("/register", {
-        fullname,
-        department,
-        role,
-        faceDescriptor,
-      });
+      const res = await api.post("/register", form);
 
       alert(res.data.message);
 
-      setFullname("");
-      setDepartment("");
-      setRole("");
-      setFaceDescriptor(null);
+      setForm({
+        fullName: "",
+        department: "",
+        role: "",
+        faceDesc: null,
+      });
+
     } catch (error: any) {
       alert(error.response?.data?.error || "Registration failed");
     } finally {
@@ -41,51 +71,87 @@ export default function RegisterPage() {
     }
   };
 
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
+    const { name, value } = e.target;
+
+    setForm((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center p-6 bg-gray-100">
-      <div className="bg-white p-8 rounded-xl shadow-md w-full max-w-md space-y-4">
-        <h1 className="text-2xl font-bold text-center">
+    <div className="min-h-screen bg-gray-100 flex items-center justify-center px-4 py-8">
+      <div className="bg-white w-full max-w-lg rounded-3xl shadow-xl p-6 md:p-8 space-y-6">
+
+        <h1 className="text-2xl md:text-3xl font-bold text-center text-gray-800">
           Register Employee
         </h1>
 
-        <input
-          type="text"
-          placeholder="Full Name"
-          value={fullname}
-          onChange={(e) => setFullname(e.target.value)}
-          className="w-full border p-2 rounded"
-        />
+        <div className="space-y-4">
+          <input
+            type="text"
+            placeholder="Full Name"
+            value={form.fullName}
+            name="fullName"
+            onChange={handleChange}
+            className="w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-indigo-500 focus:outline-none"
+          />
 
-        <input
-          type="text"
-          placeholder="Department"
-          value={department}
-          onChange={(e) => setDepartment(e.target.value)}
-          className="w-full border p-2 rounded"
-        />
+          <select
+            name="department"
+            value={form.department}
+            onChange={handleChange}
+            className="w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-indigo-500 focus:outline-none"
+          >
+            <option value="">Select Department</option>
+            {deptArr.map((dep) => (
+              <option key={dep} value={dep}>
+                {dep}
+              </option>
+            ))}
+          </select>
 
-        <input
-          type="text"
-          placeholder="Role"
-          value={role}
-          onChange={(e) => setRole(e.target.value)}
-          className="w-full border p-2 rounded"
-        />
+          <select
+            name="role"
+            value={form.role}
+            onChange={handleChange}
+            className="w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-indigo-500 focus:outline-none"
+          >
+            <option value="">Select Role</option>
+            {roleArr.map((role) => (
+              <option key={role} value={role}>
+                {role}
+              </option>
+            ))}
+          </select>
+        </div>
 
-        <FaceScanner onCapture={(descriptor) => setFaceDescriptor(descriptor)} />
+        <div className="flex justify-center">
+          <FaceScanner
+            onCapture={(descriptor: number[]) => {
+              setForm((prev) => ({
+                ...prev,
+                faceDesc: descriptor,
+              }));
+            }}
+          />
+        </div>
 
-        {faceDescriptor && (
-          <p className="text-green-600 text-sm text-center">
-            Face captured successfully ✅
-          </p>
+        {form.faceDesc && (
+          <div className="text-green-600 text-center text-sm font-medium">
+            ✅ Face captured successfully
+          </div>
         )}
 
         <button
           onClick={handleSubmit}
           disabled={loading}
-          className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700"
+          className="w-full bg-indigo-600 text-white py-3 rounded-xl font-semibold hover:bg-indigo-700 transition disabled:opacity-50"
         >
-          {loading ? "Registering..." : "Register"}
+          {loading ? "Registering..." : "Register Employee"}
         </button>
       </div>
     </div>

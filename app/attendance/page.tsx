@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-
 import FaceScanner from "@/app/components/FaceScanner";
 import { api } from "@/app/lib/axios";
 
@@ -27,9 +26,10 @@ export default function AttendancePage() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center p-6 bg-gray-100">
-      <div className="bg-white p-8 rounded-xl shadow-md w-full max-w-md space-y-4">
-        <h1 className="text-2xl font-bold text-center">
+    <div className="min-h-screen bg-gray-100 flex items-center justify-center px-4 py-8">
+      <div className="bg-white w-full max-w-lg rounded-3xl shadow-xl p-6 md:p-8 space-y-6">
+
+        <h1 className="text-2xl md:text-3xl font-bold text-center text-gray-800">
           Face Attendance
         </h1>
 
@@ -38,16 +38,18 @@ export default function AttendancePage() {
           onChange={(e) =>
             setType(e.target.value as "TIME_IN" | "TIME_OUT")
           }
-          className="w-full border p-2 rounded"
+          className="w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-indigo-500 focus:outline-none"
         >
           <option value="TIME_IN">Time In</option>
           <option value="TIME_OUT">Time Out</option>
         </select>
 
-        <FaceScanner onCapture={handleCapture} />
+        <div className="flex justify-center">
+          <FaceScanner onCapture={handleCapture} />
+        </div>
 
         {loading && (
-          <p className="text-center text-blue-600">
+          <p className="text-center text-indigo-600 font-medium">
             Validating face...
           </p>
         )}

@@ -1,0 +1,97 @@
+"use client";
+
+import { useState } from "react";
+import FaceScanner from "@/app/components/FaceScanner";
+import { api } from "@/app/lib/axios";
+
+export default function RegisterPage() {
+  const [fullname, setFullname] = useState("");
+  const [department, setDepartment] = useState("");
+  const [role, setRole] = useState("");
+  const [faceDescriptor, setFaceDescriptor] = useState<number[] | null>(null);
+  const [loading, setLoading] = useState(false);
+
+  const handleSubmit = async () => {
+    if (!faceDescriptor) {
+      alert("Please capture your face first.");
+      return;
+    }
+
+    try {
+      setLoading(true);
+
+      const res = await api.post("/register", {
+        fullname,
+        department,
+        role,
+        faceDescriptor,
+      });
+
+      alert(res.data.message);
+
+      setFullname("");
+      setDepartment("");
+      setRole("");
+      setFaceDescriptor(null);
+    } catch (error: any) {
+      alert(error.response?.data?.error || "Registration failed");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <div className="min-h-screen bg-gray-100 flex items-center justify-center px-4 py-8">
+      <div className="bg-white w-full max-w-lg rounded-3xl shadow-xl p-6 md:p-8 space-y-6">
+
+        <h1 className="text-2xl md:text-3xl font-bold text-center text-gray-800">
+          Register Employee
+        </h1>
+
+        <div className="space-y-4">
+          <input
+            type="text"
+            placeholder="Full Name"
+            value={fullname}
+            onChange={(e) => setFullname(e.target.value)}
+            className="w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-indigo-500 focus:outline-none"
+          />
+
+          <input
+            type="text"
+            placeholder="Department"
+            value={department}
+            onChange={(e) => setDepartment(e.target.value)}
+            className="w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-indigo-500 focus:outline-none"
+          />
+
+          <input
+            type="text"
+            placeholder="Role"
+            value={role}
+            onChange={(e) => setRole(e.target.value)}
+            className="w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-indigo-500 focus:outline-none"
+          />
+        </div>
+
+        <div className="flex justify-center">
+          <FaceScanner onCapture={(d) => setFaceDescriptor(d)} />
+        </div>
+
+        {faceDescriptor && (
+          <div className="text-green-600 text-center text-sm font-medium">
+            ✅ Face captured successfully
+          </div>
+        )}
+
+        <button
+          onClick={handleSubmit}
+          disabled={loading}
+          className="w-full bg-indigo-600 text-white py-3 rounded-xl font-semibold hover:bg-indigo-700 transition disabled:opacity-50"
+        >
+          {loading ? "Registering..." : "Register Employee"}
+        </button>
+      </div>
+    </div>
+  );
+}
