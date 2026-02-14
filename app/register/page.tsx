@@ -58,10 +58,10 @@ export default function RegisterPage() {
       alert(res.data.message);
 
       setForm({
-        fullName: "",
-        department: "",
-        role: "",
-        faceDesc: null,
+        fullName: form.fullName,
+        department: form.department,
+        role: form.role,
+        faceDesc: form.faceDesc,
       });
 
     } catch (error: any) {
@@ -139,6 +139,7 @@ export default function RegisterPage() {
             }}
           />
         </div>
+
 
         {form.faceDesc && (
           <div className="text-green-600 text-center text-sm font-medium">

@@ -1,15 +1,15 @@
 import { NextResponse } from "next/server";
 import { connectDB } from "@/app/lib/mongodb";
-import User from "@/app/models/Employee";
+import Employee from "@/app/models/Employee";
 
 export async function POST(req: Request) {
   try {
     await connectDB();
 
-    const { fullname, department, role, faceDescriptor } =
+    const { fullName, department, role, faceDesc } =
       await req.json();
 
-    if (!fullname || !department || !role || !faceDescriptor) {
+    if (!fullName || !department || !role || !faceDesc) {
       return NextResponse.json(
         { error: "All fields are required" },
         { status: 400 }
@@ -17,23 +17,23 @@ export async function POST(req: Request) {
     }
 
     // Optional: prevent duplicate fullname
-    const existingUser = await User.findOne({ fullname });
-    if (existingUser) {
+    const existingEmployee = await Employee.findOne({ fullName });
+    if (existingEmployee) {
       return NextResponse.json(
-        { error: "User already registered" },
+        { error: "Employee already registered" },
         { status: 400 }
       );
     }
 
-    const user = await User.create({
-      fullname,
+    const user = await Employee.create({
+      fullName,
       department,
       role,
-      faceDescriptor,
+      faceDesc,
     });
 
     return NextResponse.json({
-      message: "User registered successfully",
+      message: "Employee registered successfully",
       user,
     });
   } catch (error) {
