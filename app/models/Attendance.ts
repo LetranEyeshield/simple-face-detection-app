@@ -7,6 +7,7 @@ const AttendanceSchema = new mongoose.Schema(
       ref: "Employee",
       required: true,
     },
+    fullName: { type: String, required: true },
     type: {
       type: String,
       enum: ["TIME_IN", "TIME_OUT"],

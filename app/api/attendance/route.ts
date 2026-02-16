@@ -46,6 +46,7 @@ export async function POST(req: Request) {
 
     await Attendance.create({
       employeeId: matchedEmployee._id,
+      fullName: matchedEmployee.fullName,
       type,
     });
 
