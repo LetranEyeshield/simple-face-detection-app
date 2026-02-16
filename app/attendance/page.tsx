@@ -25,8 +25,9 @@ export default function AttendancePage() {
         descriptor,
         type,
       });
-
+fetchAttendance();
       alert(res.data.message);
+
 
       // Optional: Refresh attendance list after successful scan
       fetchAttendance();
@@ -41,6 +42,7 @@ export default function AttendancePage() {
   const fetchAttendance = async () => {
     try {
       const res = await api.get<Attendance[]>("/timelogs");
+      setAttendance(res.data);
     } catch (err) {
       console.error(err);
     }
@@ -96,6 +98,9 @@ export default function AttendancePage() {
               >
                 <span>{attend.fullName}</span>
                 <span className="font-medium">{attend.type}</span>
+                <span>
+  {new Date(attend.createdAt).toLocaleString()}
+</span>
               </li>
             ))}
           </ul>
